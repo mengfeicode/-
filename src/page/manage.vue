@@ -79,18 +79,8 @@
               path: "/addPlant",
               name: "添加农作物",
             },{
-              path: "/",
+              path: "/growthManagement",
               name: "生长周期管理",
-              children: [
-                {
-                  path: "/addGrowth",
-                  name: "添加生长周期",
-                },
-                {
-                  path: "/growthdetail",
-                  name: "生长周期详情",
-                }
-              ]
             },
             {
               path: "plantDetail",

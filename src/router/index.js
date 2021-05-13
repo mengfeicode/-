@@ -7,8 +7,7 @@ const login = r => require.ensure([], () => r(require('@/page/login')), 'login')
 const manage = r => require.ensure([], () => r(require('@/page/manage')), 'manage');
 const home = r => require.ensure([], () => r(require('@/page/home')), 'home');
 const addPlant = () => import('@/page/plantManagement/addPlant');
-const growthdetail = () => import('@/page/plantManagement/growthManagement/growthdetail');
-const addGrowth = () => import('@/page/plantManagement/growthManagement/addGrowth');
+const growthManagement = () => import('@/page/plantManagement/growthManagement');
 const plantDetail = () => import('@/page/plantManagement/plantDetail');
 const airTemperature = () => import('@/page/environment/airTemperature');
 const airHumidity = () => import('@/page/environment/airHumidity');
@@ -40,18 +39,15 @@ const routes = [
 			component: addPlant,
 			meta: ['农产品种植管理', '添加农作物'],
 		},{
-			path: '/addGrowth',
-			component: addGrowth,
-			meta: ['农产品种植管理', '生长周期管理','添加生长周期'],
-		},{
-			path: '/growthdetail',
-			component: growthdetail,
-			meta: ['农产品种植管理', '生长周期管理','生长周期详情'],
-		},{
 			path: '/plantDetail',
 			component: plantDetail,
 			meta: ['农产品种植管理', '查看种植详情'],
 		},{
+			path: '/growthManagement',
+			component: growthManagement,
+			meta: ['农产品种植管理', '生长周期管理'],
+		},
+		{
 			path: '/airTemperature',
 			component: airTemperature,
 			meta: ['环境指标', '空气温度'],
