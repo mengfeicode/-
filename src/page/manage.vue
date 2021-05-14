@@ -1,7 +1,7 @@
 <template>
 	<div class="manage_page fillcontain">
 		<el-row style="height: 100%;">
-			<el-col :span="4"  style="min-height: 100%; background-color: #324057;">
+			<el-col :span="4"  style="min-height: 100%;">
 				<el-menu style="min-height: 100%;" theme="dark" router>
 					<!-- 一级菜单 -->
 					<template v-for="item in list">
