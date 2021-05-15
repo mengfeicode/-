@@ -3,7 +3,7 @@ import axios from "axios"
 export function request(config) {
     //1.创建axios的实例
     const instance = axios.create({
-        baseURL: 'http://152.136.185.210:7878/api/m5',
+        baseURL: 'http://121.4.66.168:6789',
         timeout: 20000
     })
 
@@ -26,13 +26,20 @@ export function request(config) {
     return instance(config)
 }
 
-// 一个例子：
-export function getHomeGoods(type, page) {
+// 添加农产品
+export function addPlant(obj) {
   return request({
-      url: '/home/data',
-      params: {
-          type,
-          page
-      }
+    method: 'post',
+    url: '/crop/cropAdd',
+    data: obj,
   })
+}
+
+//查询农产品
+export function cropQry(obj){
+    return request({
+        url:'/crop/cropQry',
+        method: 'post',
+        data: obj
+    })
 }

@@ -8,20 +8,20 @@
 							<el-row>
 								<el-col :span='8'>
 									<el-form-item label="农产品名称">
-										<el-input v-model="formData.plantName"></el-input>
+										<el-input v-model="formData.cropName"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span='8'>
 									<el-form-item label="种植状态">
-										<el-select v-model="formData.plantStatus" placeholder="请选择">
-											<el-option v-for="item in status" :key="item.value" :label="item.label" :value="item.value">
+										<el-select v-model="formData.status" placeholder="请选择">
+											<el-option v-for="item in operOptions" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span='8'>
 									<el-form-item label="操作人">
-										<el-select v-model="formData.personOpera" placeholder="请选择">
+										<el-select v-model="formData.operator" placeholder="请选择">
 											<el-option v-for="item in personOptions" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
@@ -29,20 +29,20 @@
 								</el-col>
 							</el-row>
 							<el-row>
-								<el-col :span='8'>
+								<el-col :span='12'>
 									<el-form-item label="操作日期">
-										<el-date-picker type="date" placeholder="选择日期" v-model="formData.operaDate" style="width: 100%;"></el-date-picker>
+										<el-date-picker v-model="formData.operaDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyyMMdd"></el-date-picker>
 									</el-form-item>
 								</el-col>
-								<el-col :span='8'>
-									<el-form-item label="操作类型">
-										<el-select v-model="formData.operaType" placeholder="请选择">
-											<el-option v-for="item in operOptions" :key="item.value" :label="item.label" :value="item.value">
+								<el-col :span='6'>
+									<el-form-item label="农产品类型">
+										<el-select v-model="formData.cropType" placeholder="请选择">
+											<el-option v-for="item in planttype" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
-								<el-col :span='8'>
+								<el-col :span='4'>
 									<el-form-item class="button_submit">
 										<el-button type="primary" @click="submitForm('formData')">查询</el-button>
 									</el-form-item>
@@ -54,7 +54,7 @@
 						<el-table :data="tableData" style="margin-top:25px;" highlight-current-row>
     					<el-table-column prop="plantNo" label="农产品编号" align="center"></el-table-column>
     					<el-table-column prop="plantName" label="名称" align="center"></el-table-column>
-							<el-table-column prop="plantType" label="类型"></el-table-column>
+							<el-table-column prop="plantType" label="农产品类型"></el-table-column>
 							<el-table-column prop="plantStatus" label="最新种植状态" align="center"></el-table-column>
 							<el-table-column prop="operaDate" label="时间" align="center"></el-table-column>
 							<el-table-column prop="personOpera" label="操作人" width="100" align="center"></el-table-column>
@@ -122,17 +122,19 @@
 <script>
     import headTop from '@/components/headTop'
     import {baseUrl, baseImgPath} from '@/config/env'
-		import {operation ,person ,status} from '../constant.js'
+		import {operation ,person ,status ,plantTypes} from '../constant.js'
+		import {cropQry} from '@/api/request.js'
     export default {
     	data(){
     		return {
     			formData: {
-						plantName:'test',		//农产品名称
-						plantStatus:'',		//种植状态
-						personOpera:'',		//操作人
-						operaDate:'',		//操作日期
-						operaType:'',		//操作类型
+						cropName:'test',		//农产品名称
+						status:'',		//种植状态
+						operator:'',		//操作人
+						operaDate:[],		//操作日期
+						cropType:'',		//农产品类型
 					},
+					
 					tableData:[{
 						plantNo:'1' ,		//农产品编号
 						plantName:'11',		//农产品名称
@@ -141,11 +143,9 @@
 						operaDate: '33',		//时间
 						personOpera:'55',		//操作人
 					}],
-					baseUrl,
-					baseImgPath,
 					addOpera: false,
 					showInfo: false,
-					operOptions: [],
+					planttype: [],
 					value: '',
 					personOptions: [],
 					reverse: true,
@@ -168,7 +168,7 @@
 						personOpera:''
 					},
 					person: '王一',
-					status:[]
+					status:[],
 				}
     	},
     	components: {
@@ -183,6 +183,19 @@
 				this.operOptions = operation();
 				this.personOptions = person();
 				this.status = status();
+				this.planttype = plantTypes();
+				let obj = {
+						"cropName":"白",
+						"status":"播种",
+						"operator":"李四",
+						"minOperatorTime":20210514,
+						"maxOperatorTime":20210518,
+						"cropType":"蔬菜"
+				}
+				cropQry(obj).then(res => {
+					console.log(res)
+				})
+
 			},
 		}
 </script>

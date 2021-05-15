@@ -1,45 +1,65 @@
 <template>
     <div>
         <head-top></head-top>
-        <visitor-pie :pieData="pieData"></visitor-pie>
+        <el-row style="margin-top: 100px;">
+					<el-col :span="12" :offset="5">
+						<el-form :model="formData" ref="threshold" label-width="150px">
+							<el-form-item label="设备名称">
+								<el-input v-model="formData.name"></el-input>
+							</el-form-item>
+							<el-form-item label="设备编号">
+								<el-input v-model="formData.no"></el-input>
+							</el-form-item>
+							<el-form-item label="数量">
+								<el-input v-model="formData.number"></el-input>
+							</el-form-item>
+							<el-form-item label="阈值设置（最低）">
+								<el-input v-model="formData.lowData"></el-input>
+							</el-form-item>
+							<el-form-item label="阈值设置（最高）">
+								<el-input v-model="formData.highData"></el-input>
+							</el-form-item>
+							<el-form-item label="申请人">
+								<el-select v-model="formData.person" placeholder="请选择">
+									<el-option v-for="item in personOpera" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item class="button_submit">
+								<el-button type="primary" @click="submitForm('formData')">立即添加</el-button>
+							</el-form-item>
+						</el-form>
+					</el-col>
+  		</el-row>
     </div>
 </template>
 
 <script>
-	import headTop from '../../components/headTop'
-    import visitorPie from '@/components/visitorPie'
-	import {getUserCity} from '@/api/getData'
+    import headTop from '@/components/headTop'
+		import {person} from '../constant.js'
     export default {
     	data(){
     		return {
-    			pieData: {},
+					formData: {
+						name:'1',		//农产品名称
+						number:'2',		//数量
+						lowData:'',		//最低值
+						highData:'4',		//最高值
+						person:'',		//负责人
+						no:'',		//编号
+					},
+					personOpera:[]
     		}
     	},
     	components: {
     		headTop,
-            visitorPie,
     	},
     	mounted(){
-    		this.initData();
     	},
     	methods: {
-    		async initData(){
-    			try{
-    				const res = await getUserCity();
-    				if (res.status == 1) {
-    					this.pieData = res.user_city;
-    				}else{
-    					throw new Error(res)
-    				}
-    			}catch(err){
-    				console.log('获取用户分布信息失败',err);
-    			}
-    		},
-    	}
-    }
+			},
+			created(){
+				this.personOpera = person();
+			}
+		}
 </script>
-
-<style lang="less">
-	@import '../../style/mixin';
-	
-</style>

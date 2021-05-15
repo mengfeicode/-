@@ -1,19 +1,25 @@
 export function operation(){
   return [{
     value: '01',
-    label: '除草'
+    label: '种植'
   }, {
     value: '02',
-    label: '施肥'
+    label: '除草'
   }, {
     value: '03',
-    label: '施药'
+    label: '施肥'
   }, {
     value: '04',
-    label: '锄地'
+    label: '施药'
   }, {
     value: '05',
+    label: '锄地'
+  }, {
+    value: '06',
     label: '修剪'
+  }, {
+    value: '07',
+    label: '收获'
   }]
 }
 
@@ -27,6 +33,9 @@ export function person(){
   },{
     value: '03',
     label: '张三'
+  },{
+    value: '04',
+    label: '赵四'
   }]
 }
 
@@ -43,9 +52,38 @@ export function status(){
 export function plantTypes() {
   return [{
     value: '01',
-    label: '土豆'
+    label: '粮食作物'
   },{
     value: '02',
-    label: '玉米'
+    label: '油料作物'
+  },{
+    value: '03',
+    label: '蔬菜作物'
+  },{
+    value: '04',
+    label: '果类'
+  },{
+    value: '05',
+    label: '药用作物'
   }]
 }
+
+export function operMerOptions() {
+  return [{
+    value: '01',
+    label: '日常检查'
+  },{
+    value: '02',
+    label: '故障尚未维修'
+  },{
+    value: '03',
+    label: '故障返厂维修'
+  },{
+    value: '04',
+    label: '上门维修'
+  },{
+    value: '05',
+    label: '正常运转'
+  }]
+}
+
