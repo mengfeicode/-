@@ -43,3 +43,27 @@ export function cropQry(obj){
         data: obj
     })
 }
+
+//添加生产周期
+export function plantCycleAdd(obj){
+    return request({
+        url:'/crop/plantCycleAdd',
+        method: 'post',
+        data: obj
+    })
+}
+
+//查看生长周期
+export function  plantCycleQryByCropId(id){
+    return request({
+        url:'/crop/plantCycleQryByCropId/' + id,
+        method: 'post',
+    })
+}
+
+//查看种植详情
+export function plantInfo(){
+    return request({
+        url:'/crop/plantInfo'
+    })
+}

@@ -9,8 +9,11 @@
     
     export default {
         mounted(){
-            this.myChart = echarts.init(document.getElementById('lineCharts'));
-            this.initData();
+            let that = this;
+            setTimeout(function(){
+                that.myChart = echarts.init(document.getElementById('lineCharts'));
+                that.initData();
+            },2000)
         },
         props: {
           lineData:{
@@ -24,7 +27,8 @@
             initData(){
               let option = {
                 title: {
-                    text: this.lineData.title
+                    text: this.lineData.title,
+                    // x:'center'
                 },
                 tooltip: {
                     trigger: 'axis'
@@ -57,5 +61,6 @@
             }
         },
     }
+
 </script>
 

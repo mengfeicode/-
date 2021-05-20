@@ -85,30 +85,22 @@
     	methods: {
 				submitForm(formName) {
 					this.$refs.addPlant.validate((valid) => {
-          if (valid) {
-            //发送请求
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-				}
+						if (valid) {
+							addPlant(this.formData).then(res => {
+								console.log(res)
+								this.$message(res.msg);
+							})
+						} else {
+							console.log('error submit!!');
+							return false;
+						}
+					});
+				},
+				
 			},
 			created(){
 				this.plantTypes = plantTypes();
 				this.personOpera = person();
-				let obj = {
-					"cropName":"豌豆",
-					"cropType":"豆类",
-					"cropNum":1900,
-					"plantArea":2544.6,
-					"operator":"张三",
-					"harvestTime":20210514
-				};
-				addPlant(obj).then(res => {
-					console.log(res)
-					this.$message(res.msg);
-				})
 			}
 		}
 </script>

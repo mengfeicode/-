@@ -13,7 +13,7 @@
 								</el-col>
 								<el-col :span='8'>
 									<el-form-item label="种植状态">
-										<el-select v-model="formData.status" placeholder="请选择">
+										<el-select v-model="formData.status" placeholder="请选择" clearable>
 											<el-option v-for="item in operOptions" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
@@ -31,12 +31,12 @@
 							<el-row>
 								<el-col :span='12'>
 									<el-form-item label="操作日期">
-										<el-date-picker v-model="formData.operaDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyyMMdd"></el-date-picker>
+										<el-date-picker v-model="operaDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyyMMdd"></el-date-picker>
 									</el-form-item>
 								</el-col>
 								<el-col :span='6'>
 									<el-form-item label="农产品类型">
-										<el-select v-model="formData.cropType" placeholder="请选择">
+										<el-select v-model="formData.cropType" placeholder="请选择" clearable>
 											<el-option v-for="item in planttype" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
@@ -44,7 +44,7 @@
 								</el-col>
 								<el-col :span='4'>
 									<el-form-item class="button_submit">
-										<el-button type="primary" @click="submitForm('formData')">查询</el-button>
+										<el-button type="primary" @click="submitForm()">查询</el-button>
 									</el-form-item>
 								</el-col>
 							</el-row>
@@ -52,16 +52,16 @@
 						<!-- 查询信息结束 -->
 						<!-- 展示信息开始 -->
 						<el-table :data="tableData" style="margin-top:25px;" highlight-current-row>
-    					<el-table-column prop="plantNo" label="农产品编号" align="center"></el-table-column>
-    					<el-table-column prop="plantName" label="名称" align="center"></el-table-column>
-							<el-table-column prop="plantType" label="农产品类型"></el-table-column>
-							<el-table-column prop="plantStatus" label="最新种植状态" align="center"></el-table-column>
-							<el-table-column prop="operaDate" label="时间" align="center"></el-table-column>
-							<el-table-column prop="personOpera" label="操作人" width="100" align="center"></el-table-column>
+    					<el-table-column prop="cropId" label="农产品编号" align="center"></el-table-column>
+    					<el-table-column prop="cropName" label="名称" align="center"></el-table-column>
+							<el-table-column prop="cropType" label="农产品类型"></el-table-column>
+							<el-table-column prop="status" label="最新种植状态" align="center"></el-table-column>
+							<el-table-column prop="operateTime" label="时间" align="center"></el-table-column>
+							<el-table-column prop="operator" label="操作人" width="100" align="center"></el-table-column>
 							<el-table-column fixed="right" label="生长周期管理" width="260" min-width="200" align="center">
 								<template slot-scope="scope">
-									<el-button @click="addOpera = true" type="text" size="small">添加操作</el-button>
-									<el-button @click="showInfo = true" type="text" size="small">显示详情</el-button>
+									<el-button @click="addButton(scope.row)" type="text" size="small">添加操作</el-button>
+									<el-button @click="showDetail(scope.row)" type="text" size="small">显示详情</el-button>
 								</template>
 							</el-table-column>
 						</el-table>
@@ -72,16 +72,16 @@
 								<el-col :span="12" :offset="5">
 									<el-form :model="addplantData" label-width="80px" align='left'>
 										<el-form-item label="操作类型">
-											<el-select v-model="addplantData.operaType" placeholder="请选择">
+											<el-select v-model="addplantData.status" placeholder="请选择">
 												<el-option v-for="item in operOptions" :key="item.value" :label="item.label" :value="item.value">
 												</el-option>
 											</el-select>
 										</el-form-item>
 										<el-form-item label="具体操作">
-											<el-input type="textarea" v-model="addplantData.operaDes"></el-input>
+											<el-input type="textarea" v-model="addplantData.operation"></el-input>
 										</el-form-item>
 										<el-form-item label="操作人">
-											<el-select v-model="addplantData.personOpera" placeholder="请选择">
+											<el-select v-model="addplantData.operator" placeholder="请选择">
 												<el-option v-for="item in personOptions" :key="item.value" :label="item.label" :value="item.value">
 												</el-option>
 											</el-select>
@@ -91,7 +91,7 @@
 							</el-row>
 							<span slot="footer" class="dialog-footer">
 								<el-button @click="addOpera = false">取 消</el-button>
-								<el-button type="primary" @click="addOpera = false">确 定</el-button>
+								<el-button type="primary" @click="addOperaSubmit()">确 定</el-button>
 							</span>
 						</el-dialog>
             <!-- 添加操作弹出框结束 -->
@@ -104,11 +104,11 @@
 									</el-radio-group>
 								</div>
 								<el-timeline :reverse="reverse" style="margin-top:20px;">
-									<el-timeline-item v-for="(activity, index) in activities" :key="index" :timestamp="activity.timestamp" placement="top">
-										{{activity.content}}
+									<el-timeline-item v-for="(activity, index) in activities" :key="index" :timestamp="activity.operateTime" placement="top">
+										{{activity.status}}
 										<el-card>
-											<h4>{{activity.content}}</h4>
-											<p>{{activity.person}} 提交于 {{activity.timestamp}}</p>
+											<h4 style="margin:5px 0 10px 0">{{activity.operation}}</h4>
+											<p>{{activity.operator}} 提交于 {{activity.operateTime | formatData}}</p>
 										</el-card>
 									</el-timeline-item>
 								</el-timeline>
@@ -121,27 +121,27 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {baseUrl, baseImgPath} from '@/config/env'
-		import {operation ,person ,status ,plantTypes} from '../constant.js'
-		import {cropQry} from '@/api/request.js'
+		import {operation ,person ,plantTypes} from '../constant.js'
+		import {cropQry ,plantCycleAdd ,plantCycleQryByCropId} from '@/api/request.js'
     export default {
     	data(){
     		return {
     			formData: {
-						cropName:'test',		//农产品名称
+						cropName:'',		//农产品名称
 						status:'',		//种植状态
 						operator:'',		//操作人
-						operaDate:[],		//操作日期
+						minOperatorTime:'',		//操作日期
+						maxOperatorTime:'',
 						cropType:'',		//农产品类型
 					},
-					
+					operaDate:[],
 					tableData:[{
-						plantNo:'1' ,		//农产品编号
-						plantName:'11',		//农产品名称
-						plantType: '22',		//类型
-						plantStatus:'44',		//最新种植状态
-						operaDate: '33',		//时间
-						personOpera:'55',		//操作人
+						cropId:'' ,		//农产品编号
+						cropName:'',		//农产品名称
+						cropType: '',		//类型
+						status:'',		//最新种植状态
+						operateTime: '',		//时间
+						operator:'',		//操作人
 					}],
 					addOpera: false,
 					showInfo: false,
@@ -149,25 +149,13 @@
 					value: '',
 					personOptions: [],
 					reverse: true,
-					activities: [{
-						content: '活动按期开始',
-						timestamp: '2018-04-15',
-						person:'王一'
-					}, {
-						content: '通过审核',
-						timestamp: '2018-04-13',
-						person:'王一'
-					}, {
-						content: '创建成功',
-						timestamp: '2018-04-11',
-						person:'王一'
-					}],
-					addplantData:{
-						operaType:'',//添加的操作类型
-						operaDes:'',
-						personOpera:''
+					activities: [],		//时间线
+					addplantData:{		//添加操作
+						status:'',//添加的操作类型
+						operation:'',
+						operator:''
 					},
-					person: '王一',
+					person: '',
 					status:[],
 				}
     	},
@@ -175,26 +163,47 @@
     		headTop,
     	},
     	mounted(){
-    		// this.initData();
+    		this.submitForm(this.formData);
     	},
     	methods: {
+				//查询
+				submitForm(){
+					if(this.operaDate && this.operaDate.length != 0){
+						this.formData.minOperatorTime = this.operaDate[0];
+						this.formData.maxOperatorTime = this.operaDate[1];
+					}
+					cropQry(this.formData).then(res => {
+						this.tableData = res.data;
+					})
+				},
+				//点击添加操作页面
+				addButton(row){
+					this.addOpera = true;
+					this.addplantData.cropId = row.cropId;
+				},
+				addOperaSubmit(){
+					this.addOpera = false;
+					plantCycleAdd(this.addplantData).then(res => {
+						this.$message(res.msg);
+					})
+				},
+				showDetail(row){
+					this.showInfo = true;
+					plantCycleQryByCropId(row.cropId).then(res => {
+						this.activities = res.data;
+						this.$message(res.msg);
+					})
+				}
+			},
+			filters: {
+				formatData: function (value) {
+					return value.substring(0,4) + '年' + value.substring(4,6) + '月' + value.substring(6) + '日'
+				}
 			},
 			created() {
 				this.operOptions = operation();
 				this.personOptions = person();
-				this.status = status();
 				this.planttype = plantTypes();
-				let obj = {
-						"cropName":"白",
-						"status":"播种",
-						"operator":"李四",
-						"minOperatorTime":20210514,
-						"maxOperatorTime":20210518,
-						"cropType":"蔬菜"
-				}
-				cropQry(obj).then(res => {
-					console.log(res)
-				})
 
 			},
 		}

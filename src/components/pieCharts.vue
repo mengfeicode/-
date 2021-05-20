@@ -9,8 +9,12 @@
     
     export default {
         mounted(){
-            this.myChart = echarts.init(document.getElementById('pieCharts'),'light');
-            this.initData();
+            var that = this;
+            //网速有时候慢，所以设置1s
+            setTimeout(function(){
+                that.myChart = echarts.init(document.getElementById('pieCharts'),'light');
+                that.initData();
+            },1000)
         },
         props: {
             pieData:{
